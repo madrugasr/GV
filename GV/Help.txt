@@ -1,0 +1,19 @@
+﻿static int MenuPrincipal()
+        {
+            Console.WriteLine("GV - Gestão de Vendas");
+            Console.WriteLine("1. Vendedores");
+            Console.WriteLine("2. Vendas");
+            int op = Validacao(1, 2, true);
+            
+            switch (op)
+            {
+                case 1:
+                    MenuVendedores();
+                    break;
+                case 2:
+                    MenuVendas();
+                    break;
+                default:
+                    Console.WriteLine("Opção inválida!");
+                    break;
+            }
