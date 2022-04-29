@@ -1,19 +1,153 @@
-﻿static int MenuPrincipal()
+﻿ static void MenuVenda()
         {
-            Console.WriteLine("GV - Gestão de Vendas");
-            Console.WriteLine("1. Vendedores");
-            Console.WriteLine("2. Vendas");
-            int op = Validacao(1, 2, true);
-            
-            switch (op)
+            Console.Clear();
+            Console.WriteLine("MENU VENDA");
+            Console.WriteLine("\n1. Inserir");
+            Console.WriteLine("2. Consultar");
+            Console.WriteLine("3. Listar");
+            Console.WriteLine("4. Alterar");
+            Console.WriteLine("5. Eliminar");
+            Console.WriteLine("6. Total de vendas por Vendedor");
+            Console.WriteLine("7. Total de vendas por Zona");
+            Console.WriteLine("8. Total de vendas por Mês");
+            Console.WriteLine("9. Total de vendas por Mês para cada Vendedor");
+            Console.WriteLine("\n0. Voltar");
+            int opMenu = Validacao(0, 9, true);
+
+
+            //Definição da estrutura para o Array Vendedor.
+            Venda[] venda = new Venda[0];
+
+            //Variáveis Menu
+            int codigoVenda;
+
+            switch (opMenu)
             {
-                case 1:
-                    MenuVendedores();
+                case 1: //Inserindo Vendas.
+                    Console.Clear();
+                    Console.Write("INSERIR VENDA");
+                    Console.Write("\nQuantas  vendas quer adicionar? ");
+                    int numVendedores = Validacao(1, 1000, true);
+
+                    //Valida o tamanho antigo do Array Venda.
+                    int tamanhoAntigo = venda.Length;
+
+                    // Obtem o número total de índices do Array Venda.
+                    int tamanhoAtual = tamanhoAntigo + numVendedores;
+
+                    // Redimensiona o comprimento do Array Venda para a nova dimensão.
+                    Array.Resize(ref venda, tamanhoAtual);
+
+                    for (int i = tamanhoAntigo; i < tamanhoAtual; i++)
+                    {
+                        Console.WriteLine($"Inserindo o(a) {i + 1}º Vendedor(a)");
+
+                        //Inserindo novos vendedores no Array Vendedor.
+                        Console.Write("Código: ");
+                        venda[i].codVendedor = ValidaCodigoVendedor(1, 1000, venda, "new");
+
+                        Console.Write("Nome: ");
+                        venda[i].nomVendedor = Console.ReadLine();
+
+                        Console.Write("Comissão: ");
+                        //venda[i].comissaoVendedor = Console.ReadLine();
+
+                    }
                     break;
-                case 2:
-                    MenuVendas();
+
+                case 2: //Consultar Vendedor
+                    Console.Clear();
+                    Console.WriteLine("CONSULTAR VENDEDOR");
+                    Console.WriteLine("\nCódigo do Vendedor: ");
+                    codigoVendedor = ValidaCodigoVendedor(1, 1000, venda, "exist");
+
+                    for (int i = 0; i < venda.Length; i++)
+                        if (codigoVendedor == venda[i].codVendedor)
+                        {
+
+                            Console.WriteLine($"Código: {venda[i].codVendedor}, " +
+                                $"Nome: {venda[i].nomVendedor}, " +
+                                $"Comissão: {venda[i].comissaoVendedor}");
+                        }
                     break;
-                default:
-                    Console.WriteLine("Opção inválida!");
+
+                case 3: // Listar Vendedores
+                    Console.Clear();
+                    Console.WriteLine("LISTAR VENDEDOR");
+                    for (int i = 0; i < venda.Length; i++)
+                    {
+
+                        Console.WriteLine($"Código: {venda[i].codVendedor}, " +
+                            $"Nome: {venda[i].nomVendedor}, " +
+                            $"Comissão: {venda[i].comissaoVendedor}");
+
+                    }
+                    break;
+
+                case 4: //Alterar Vendedores
+                    Console.Clear();
+                    Console.WriteLine("ALTERAR VENDEDOR");
+                    Console.WriteLine("\nCódigo do Vendedor: ");
+                    codigoVendedor = ValidaCodigoVendedor(1, 1000, venda, "exist");
+
+                    for (int i = 0; i < venda.Length; i++)
+                        if (codigoVendedor == venda[i].codVendedor)
+                        {
+                            Console.WriteLine($"Código: {venda[i].codVendedor}, " +
+                            $"Nome: {venda[i].nomVendedor}, " +
+                            $"Comissão: {venda[i].comissaoVendedor}");
+
+                            Console.WriteLine("ALTERAÇÃO");
+
+                            Console.Write("Código: ");
+                            venda[i].codVendedor = ValidaCodigoVendedor(1, 1000, venda, "new");
+
+                            Console.Write("Nome: ");
+                            venda[i].nomVendedor = Console.ReadLine();
+
+                            Console.Write("Comissão: ");
+                            //venda[i].comissaoVendedor = Console.ReadLine();
+                        }
+                    break;
+
+
+                case 5: //Eliminando colaborador.
+                    Console.Clear();
+                    Console.WriteLine("DELETAR VENDEDOR");
+                    Console.WriteLine("Código do Vendedor: ");
+                    codigoVendedor = ValidaCodigoVendedor(1, 1000, venda, "exist");
+
+                    for (int i = 0; i < venda.Length; i++)
+                    {
+                        if (codigoVendedor == venda[i].codVendedor)
+                        {
+
+                            Console.WriteLine($"Código: {venda[i].codVendedor}, " +
+                                $"Nome: {venda[i].nomVendedor}, " +
+                                $"Comissão: {venda[i].comissaoVendedor}");
+                        }
+
+                        Console.WriteLine("Eliminar vendedor? (S/n)");
+                        string eliminar = Console.ReadLine();
+
+                        if (eliminar == "S")
+                        {
+                            Console.WriteLine("Eliminando os dados...");
+                            for (int k = i; k < venda.Length - 1; k++)
+                            {
+                                venda[k].codVendedor = venda[k + 1].codVendedor;
+                                venda[k].nomVendedor = venda[k + 1].nomVendedor;
+                                venda[k].comissaoVendedor = venda[k + 1].comissaoVendedor;
+                            }
+                        }
+                    }
+                    break;
+
+                case 0:
+                    Console.Clear();
+                    Console.WriteLine("Obrigado por utilizar a nossa aplicação.");
+                    Console.WriteLine("Tchau!");
+                    Environment.Exit(0);
                     break;
             }
+        }
