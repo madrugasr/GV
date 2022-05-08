@@ -418,7 +418,8 @@ namespace Gestor_Vendas
 
                                 Array.Resize(ref vendedor, 0);
 
-                                string arquivoLer = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\GV\GV\Save\Vendedor\Vendedor.csv";
+                                string arquivoLer = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Vendedor\Vendedor.csv";
+                                
 
                                 StreamReader textoLeitura = new(arquivoLer);
                                 CsvConfiguration csvConfigIn = new (CultureInfo.CurrentCulture)
@@ -459,7 +460,7 @@ namespace Gestor_Vendas
                                 Console.OutputEncoding = Encoding.UTF8;
 
                                 //Definição de Variável
-                                string arquivoSalvar = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\GV\GV\Save\Vendedor\Vendedor.csv";
+                                string arquivoSalvar = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Vendedor\Vendedor.csv";
 
                                 //Usar a Classe StreamWrite para acesso ao ficheiro para a escrita.
                                 StreamWriter textoEscrita = new(arquivoSalvar);
@@ -955,6 +956,7 @@ namespace Gestor_Vendas
 
                                 
                                 break;
+                                
 
                             //Leitura Dados de Vendas.
                             case 10:
@@ -963,7 +965,7 @@ namespace Gestor_Vendas
 
                                 Array.Resize(ref venda, 0);
 
-                                string arquivoLer = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\GV\GV\Save\Venda\Venda.csv";
+                                string arquivoLer = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Venda\Venda.csv";
 
                                 StreamReader textoLeitura = new(arquivoLer);
                                 CsvConfiguration csvConfigIn = new(CultureInfo.CurrentCulture)
@@ -1007,7 +1009,7 @@ namespace Gestor_Vendas
                                 Console.OutputEncoding = Encoding.UTF8;
 
                                 //Definição de Variável
-                                string arquivoSalvar = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\GV\GV\Save\Venda\Venda.csv";
+                                string arquivoSalvar = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Venda\Venda.csv";
 
                                 //Usar a Classe StreamWrite para acesso ao ficheiro para a escrita.
                                 StreamWriter textoEscrita = new(arquivoSalvar);
@@ -1061,14 +1063,4 @@ namespace Gestor_Vendas
 }
 
 
-                
-
-
-    
-        
-
-    
-
-
-
-
+      
