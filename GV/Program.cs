@@ -59,69 +59,85 @@ namespace Gestor_Vendas
                 //True se encontra ou F se não encontra.
                 bool result = ValidaCodExisteVendedor(codigo, vendedor);
 
-
-                if (result == true && tipo == "new")
+                switch (tipo)
                 {
-                    Console.WriteLine($"Código {codigo} existe!");
+                    case "new":
+                        if (result == true)
+                        {
+                            Console.WriteLine($"Código {codigo} existe!");
+                        }
+
+                        else if (result == false)
+                        {
+                            Console.WriteLine($"Código {codigo} não existe!");
+                            break;
+                        }
+                        break;
+
+                    case "exist":
+                        if (result == true)
+                        {
+                            Console.WriteLine($"Código {codigo} existe!");
+                            break;
+                        }
+
+                        else if (result == false)
+                        {
+                            Console.WriteLine($"Código {codigo} não existe!");
+                        }
+                        break;
                 }
 
-                else if (result == false && tipo == "new")
-                {
-                    Console.WriteLine($"Código {codigo} não existe!");
-                    break;
-                }
+                return codigo;
 
-                else if (result == true && tipo == "exist")
-                {
-                    Console.WriteLine($"Código {codigo} existe!");
-                    break;
-                }
-
-                else if (result == false && tipo == "exist")
-                {
-                    Console.WriteLine($"Código {codigo} não existe!");
-                }
             }
-            return codigo;
         }
 
-
-
-        //Função para validar um numero.
-        static int Validacao(int menor, int maior, bool msg)
+        //Salvar dados de Vendedores.
+        public static void SalvarVendedor(Vendedor[] vendedor)
         {
+            //Escrita de chars corretos ã e ê, etc.
+            Console.OutputEncoding = Encoding.UTF8;
 
-            int num;
-            bool ok = false;
+            //Definição do caminho do Arquivo.
+            string arquivo = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Vendedor\Vendedor.csv";
 
-            //Ciclo de validação.
-            do
+
+            using (StreamWriter escrita = new(arquivo))
             {
-                if (msg)
-                    Console.Write($"Escrever um número entre {menor} e {maior}: ");
+                //Adicionando configuração CSV
+                CsvConfiguration csvConfigOut = new(CultureInfo.CurrentCulture)
+                {
+                    Comment = '#',
+                    //AllowComments = true,
+                    //Delimiter = "; ",
+                };
 
-                string valor = Console.ReadLine();
+                CsvWriter escrever = new(escrita, csvConfigOut);
 
-                //Testa o conteúdo da variável.
-                bool t = int.TryParse(valor, out num);
+                //Adicionando Cabeçalho
+                escrever.WriteField("Código");
+                escrever.WriteField("Nome");
+                escrever.WriteField("Comissão");
+                escrever.NextRecord();
 
-                //Validação do intervalo númerico.
-                if (!t || num < menor || num > maior)
-                    Console.WriteLine("Valor inválido, insira novamente!");
-                else
-                   ok = true;
+                for (int i = 0; i < vendedor.Length; i++)
+                {
+                    escrever.WriteField(vendedor[i].codVendedor);
+                    escrever.WriteField(vendedor[i].nomVendedor);
+                    escrever.WriteField(vendedor[i].comissaoVendedor);
+                    escrever.NextRecord();
+                }
+            }
 
-            } while (!ok);
-
-            //Retorno do número validado.
-            return num;
+            Console.ReadKey();
         }
 
 
         // Função que valida se codigo de Venda existe.
         static bool ValidaCodExisteVenda(int codigo, Venda[] venda)
         {
-         
+
             //Se encontrar passa a true.
             bool encontrei = false;
 
@@ -138,8 +154,8 @@ namespace Gestor_Vendas
         }
 
 
-        //Valida se o número existe e
-        //toma a decisão de aceitar ou não de acordo com o tipo.
+        //Valida se o número existe.
+        //Toma a decisão de aceitar ou não de acordo com o tipo.
         static int ValidaCodigoVenda(int limEsq, int limDir, Venda[] venda, string tipo)
         {
             int codigo;
@@ -152,34 +168,121 @@ namespace Gestor_Vendas
                 bool result = ValidaCodExisteVenda(codigo, venda);
 
 
-                if (result == true && tipo == "new")
+                switch (tipo)
                 {
-                    Console.WriteLine($"Código {codigo} existe!");
-                }
+                    case "new":
+                        if (result == true)
+                        {
+                            Console.WriteLine($"Código {codigo} existe!");
+                        }
 
-                else if (result == false && tipo == "new")
-                {
-                    Console.WriteLine($"Código {codigo} não existe!");
-                    break;
-                }
+                        else if (result == false)
+                        {
+                            Console.WriteLine($"Código {codigo} não existe!");
+                            break;
+                        }
+                        break;
 
-                else if (result == true && tipo == "exist")
-                {
-                    Console.WriteLine($"Código {codigo} existe!");
-                    break;
-                }
+                    case "exist":
+                        if (result == true)
+                        {
+                            Console.WriteLine($"Código {codigo} existe!");
+                            break;
+                        }
 
-                else if (result == false && tipo == "exist")
-                {
-                    Console.WriteLine($"Código {codigo} não existe!");
+                        else if (result == false)
+                        {
+                            Console.WriteLine($"Código {codigo} não existe!");
+                        }
+                        break;
+
                 }
+                return codigo;
+
             }
-            return codigo;
         }
 
-        static void Main(string[] args)
+
+
+        //Salvando dados de Vendas.
+        public static void SalvarVenda(Venda[] venda)
         {
- 
+
+            //Escrita de chars corretos ã e ê, etc.
+            Console.OutputEncoding = Encoding.UTF8;
+
+            //Definição de Variável
+            string arquivo = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Venda\Venda.csv";
+
+            //Usar a Classe StreamWrite para acesso ao ficheiro para a escrita.
+            using (StreamWriter escrita = new(arquivo))
+            {
+                //Adicionando configuração CSV
+                CsvConfiguration csvConfigOut = new(CultureInfo.CurrentCulture)
+                {
+                    Comment = '#',
+                    AllowComments = true,
+                    Delimiter = ";",
+                };
+
+                CsvWriter escrever = new(escrita, csvConfigOut);
+
+                //Adicionando Cabeçalho
+                escrever.WriteField("Código");
+                escrever.WriteField("Zona");
+                escrever.WriteField("Data");
+                escrever.WriteField("Valor");
+                escrever.NextRecord();
+
+                for (int i = 0; i < venda.Length; i++)
+                {
+                    escrever.WriteField(venda[i].codVenda);
+                    escrever.WriteField(venda[i].zonaVenda);
+                    escrever.WriteField(venda[i].dataVenda);
+                    escrever.WriteField(venda[i].valorVenda);
+                    escrever.NextRecord();
+                }
+            }
+
+        }
+
+
+
+        //Função para validar um numero.
+        static int Validacao(int menor, int maior, bool msg)
+        {
+
+            int num;
+            bool ok = false;
+
+            //Ciclo de validação.
+            do
+            {
+
+                if (msg)
+                    Console.Write($"Escrever um número entre {menor} e {maior}: ");
+
+                string? valor = Console.ReadLine();
+
+                //Testa o conteúdo da variável.
+                bool t = int.TryParse(valor, out num);
+
+                //Validação do intervalo númerico.
+                if (!t || num < menor || num > maior)
+                    Console.WriteLine("Valor inválido, insira novamente!");
+                else
+                    ok = true;
+
+            } while (!ok);
+
+            //Retorno do número validado.
+            return num;
+        }
+
+
+        static void Main()
+        {
+
             //Definição da estrutura para o Array Venda.
             Venda[] venda = Array.Empty<Venda>();
 
@@ -191,11 +294,11 @@ namespace Gestor_Vendas
 
             void Menu()
             {
-
                 Console.WriteLine("GESTÃO DE VENDAS");
                 Console.WriteLine("\n1. Vendedor");
                 Console.WriteLine("2. Venda");
                 Console.WriteLine("\n0. Sair");
+                Console.Write("\nEscolha sua Opção: ");
                 int opcao = Validacao(0, 2, true);
 
 
@@ -223,7 +326,7 @@ namespace Gestor_Vendas
 
                 //Menu Vendedor.
                 void MenuVendedor()
-                { 
+                {
 
                     //Operação Vendedor
                     do
@@ -236,13 +339,12 @@ namespace Gestor_Vendas
                         Console.WriteLine("4. Alterar");
                         Console.WriteLine("5. Eliminar");
                         Console.WriteLine("6. Comissão de Vendas");
-                        
                         Console.WriteLine("\n7. Carregar Dados");
-                        Console.WriteLine("8. Salvar Dados");
-
 
                         Console.WriteLine("\n0. Voltar");
-                        int opcaoVendedor = Validacao(0, 8, true);
+
+                        Console.Write("\nEscolha sua Opção: ");
+                        int opcaoVendedor = Validacao(0, 7, true);
 
 
                         switch (opcaoVendedor)
@@ -250,7 +352,7 @@ namespace Gestor_Vendas
                             case 1: //Inserindo Vendedores.
                                 Console.Clear();
                                 Console.WriteLine("INSERIR VENDEDOR");
-                                Console.WriteLine("\nQuantos vendedores quer adicionar?");
+                                Console.Write("\nQuantos vendedores quer adicionar? ");
                                 int numVendedores = Validacao(1, 1000, true);
 
                                 //Valida o tamanho antigo do Array Vendedor.
@@ -308,7 +410,7 @@ namespace Gestor_Vendas
                                     Console.WriteLine($"\nCódigo: {vendedor[i - 1].codVendedor}" +
                                                         $"\nNome: {vendedor[i - 1].nomVendedor}" +
                                                         $"\nComissão: {vendedor[i - 1].comissaoVendedor * 100}");
-                                
+
                                 }
                                 break;
 
@@ -322,11 +424,11 @@ namespace Gestor_Vendas
 
                                     if (codigoVendedoralt == vendedor[i].codVendedor)
                                     {
-                                        
+
                                         Console.WriteLine($"\nCódigo: {vendedor[i].codVendedor}" +
                                                             $"\nNome: {vendedor[i].nomVendedor}" +
                                                             $"\nComissão: {vendedor[i].comissaoVendedor * 100}");
-                                        
+
                                         Console.WriteLine("\nALTERAÇÃO");
 
                                         Console.Write("\nCódigo: ");
@@ -364,7 +466,7 @@ namespace Gestor_Vendas
 
                                     if (eliminar == "S")
                                     {
-                                        
+
                                         for (int k = i; k < vendedor.Length - 1; k++)
                                         {
                                             vendedor[k].codVendedor = vendedor[k + 1].codVendedor;
@@ -379,11 +481,11 @@ namespace Gestor_Vendas
                                     else
                                         Console.WriteLine("\nVendedor não Eliminado!");
 
-                                } 
+                                }
                                 break;
 
                             case 6: //Cálculos de Comissões
-                         
+
                                 Console.Clear();
                                 Console.WriteLine("COMISSÃO DE VENDAS");
                                 Console.WriteLine("\nCódigo do Vendedor:");
@@ -411,88 +513,41 @@ namespace Gestor_Vendas
                                 Console.ReadKey();
                                 break;
 
-                            //Leitura de Ficheiro.
+                            //Ler dados de Vendedores.
                             case 7:
-                                Console.Clear();
-                                Console.WriteLine("LEITURA DE ARQUIVOS");
-
                                 Array.Resize(ref vendedor, 0);
 
-                                string arquivoLer = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Vendedor\Vendedor.csv";
-                                
+                                //Definição do caminho do Arquivo.
+                                string arquivoL = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Vendedor\Vendedor.csv";
 
-                                StreamReader textoLeitura = new(arquivoLer);
-                                CsvConfiguration csvConfigIn = new (CultureInfo.CurrentCulture)
+                                //Lendo os dados do Arquivo.
+                                using (StreamReader leitura = new(arquivoL))
                                 {
-                                    Comment = '#',
-                                    AllowComments = true,
-                                    Delimiter = ";",
-                                };
-                                
-                                CsvReader ler = new (textoLeitura, csvConfigIn);
-
-                                int l = 0;
-                                while (ler.Read())
-                                {
-                                    if (l > 0)
+                                    //Adicionando configuração CSV
+                                    CsvConfiguration csvConfigIn = new(CultureInfo.CurrentCulture)
                                     {
-                                        //incremento = vendedor.Leght + 1;
-                                        Array.Resize(ref vendedor, vendedor.Length + 1);
+                                        //Comment = '#',
+                                        //AllowComments = true,
+                                        Delimiter = ";",
+                                    };
 
-                                        vendedor[l - 1].codVendedor = Convert.ToInt32(ler.GetField(0));
-                                        vendedor[l - 1].nomVendedor = ler.GetField(1);
-                                        vendedor[l - 1].comissaoVendedor = Convert.ToDecimal(ler.GetField(2));
+                                    CsvReader ler = new(leitura, csvConfigIn);
+
+                                    //Adicionando Cabeçalho
+                                    ler.Read();
+
+                                    //Lendo os dados do Arquivo.
+                                    for (int i = 0; i < vendedor.Length; i++)
+                                    {
+                                        vendedor[i].codVendedor = ler.GetField<int>("Código");
+                                        vendedor[i].nomVendedor = ler.GetField<string>("Nome");
+                                        vendedor[i].comissaoVendedor = ler.GetField<decimal>("Comissão");
+                                        ler.Read();
                                     }
+
                                 }
 
-
-                                textoLeitura.Close();
-                                Console.WriteLine("\nFicheiro Carregado com Sucesso!");
-                                break;
-
-
-                            //Salvando Dados dos Vendedores.
-                            case 8:
-                                Console.Clear();
-                                Console.WriteLine("SALVANDO DADOS DE VENDEDORES");
-
-                                //Escrita de chars corretos ã e ê, etc.
-                                Console.OutputEncoding = Encoding.UTF8;
-
-                                //Definição de Variável
-                                string arquivoSalvar = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Vendedor\Vendedor.csv";
-
-                                //Usar a Classe StreamWrite para acesso ao ficheiro para a escrita.
-                                StreamWriter textoEscrita = new(arquivoSalvar);
-                                
-
-                                CsvConfiguration csvConfig = new (CultureInfo.CurrentCulture)
-                                {
-                                    Comment = '#',
-                                    AllowComments = true,
-                                    Delimiter = ";",
-                                };
-
-                                CsvWriter escrita = new (textoEscrita, csvConfig);
-
-
-                                //Escreve cabeçalho do Ficheiro.
-                                escrita.WriteField("Código");
-                                escrita.WriteField("Nome");
-                                escrita.WriteField("Comissão");
-                                escrita.NextRecord();
-
-
-                                for (int i = 0; i < vendedor.Length; i++)
-                                { 
-                                    escrita.WriteField(vendedor[i].codVendedor);
-                                    escrita.WriteField(vendedor[i].nomVendedor);
-                                    escrita.WriteField(vendedor[i].comissaoVendedor);
-                                    escrita.NextRecord();
-                                }
-                                
-                                textoEscrita.Close();
-                                Console.WriteLine("\nDados Salvos com Sucesso!");
+                                Console.WriteLine("\nDados de Vendedores Lidos com Sucesso!");
                                 break;
 
                             case 0:
@@ -501,7 +556,8 @@ namespace Gestor_Vendas
                                 break;
                         }
 
-                        Console.ReadKey();
+
+                        SalvarVendedor(vendedor);
 
                     } while (true);
                 }
@@ -527,10 +583,11 @@ namespace Gestor_Vendas
                         Console.WriteLine("9. Total de Vendas por Mês para cada Vendedor");
 
                         Console.WriteLine("\n10. Carregar Dados");
-                        Console.WriteLine("11. Salvar Dados");
-                        
+
                         Console.WriteLine("\n0. Voltar");
-                        int opcaoVenda = Validacao(0, 11, true);
+
+                        Console.Write("\nEscolha sua Opção: ");
+                        int opcaoVenda = Validacao(0, 10, true);
 
 
                         switch (opcaoVenda)
@@ -538,7 +595,7 @@ namespace Gestor_Vendas
                             case 1: //Inserindo Venda.
                                 Console.Clear();
 
- 
+
                                 Console.WriteLine("INSERIR VENDA");
                                 Console.WriteLine("\nQuantos vendas quer adicionar?");
                                 int numVenda = Validacao(1, 1000, true);
@@ -572,15 +629,14 @@ namespace Gestor_Vendas
 
                                     Console.Write("Mês: ");
                                     int mes = Convert.ToInt32(Validacao(1, 12, true));
+                                    venda[i].dataVenda = $"{dia}/{mes}/2021";
 
-                                    var data = $"{dia}/{mes}/2021";
-                                    venda[i].dataVenda = data;
 
                                     Console.Write("\nValor: ");
                                     venda[i].valorVenda = Convert.ToDecimal(Console.ReadLine());
 
                                 }
-                                    
+
                                 Console.WriteLine("\nVendedores inseridos com sucesso!");
                                 break;
 
@@ -615,7 +671,7 @@ namespace Gestor_Vendas
                                 break;
 
                             case 4: //Alterar Venda
-                                
+
                                 Console.Clear();
                                 Console.WriteLine("ALTERAR VENDA");
                                 Console.WriteLine("\nCódigo de Venda:");
@@ -643,10 +699,8 @@ namespace Gestor_Vendas
                                         int dia = Convert.ToInt32(Validacao(1, 31, true));
 
                                         Console.Write("Mês: ");
-                                        int mes = Convert.ToInt32(Validacao(1, 12, true));
-
-                                        var data = $"{dia}/{mes}/2021";
-                                        venda[i].dataVenda = data;
+                                        int Mes = Convert.ToInt32(Validacao(1, 12, true));
+                                        venda[i].dataVenda = $"{dia}/{Mes}/2021";
 
                                         Console.Write("\nValor: ");
                                         venda[i].valorVenda = Convert.ToDecimal(Console.ReadLine());
@@ -656,7 +710,7 @@ namespace Gestor_Vendas
                                 Console.WriteLine("\nVendedores alterados com sucesso!");
                                 break;
 
-                                
+
                             case 5: //Eliminando Venda.
                                 Console.Clear();
                                 Console.WriteLine("DELETAR VENDA");
@@ -666,7 +720,7 @@ namespace Gestor_Vendas
                                 for (int i = 0; i < venda.Length; i++)
                                 {
 
-                                    
+
                                     if (codigoVenda == venda[i].codVenda)
                                     {
 
@@ -681,25 +735,25 @@ namespace Gestor_Vendas
 
                                     if (eliminar == "S")
                                     {
-                                       
+
                                         for (int e = i; e < venda.Length - 1; e++)
                                         {
                                             venda[e].codVenda = venda[e + 1].codVenda;
-                                            venda[e].zonaVenda = venda[e +  1].zonaVenda;
+                                            venda[e].zonaVenda = venda[e + 1].zonaVenda;
                                             venda[e].dataVenda = venda[e + 1].dataVenda;
                                             venda[e].valorVenda = venda[e + 1].valorVenda;
-                                            
+
                                             Array.Resize(ref venda, venda.Length - 1);
 
 
                                         }
                                         Console.WriteLine("Dados eliminados com sucesso!");
 
-                                 
+
                                     }
                                     else
                                         Console.WriteLine("Venda não Eliminada!");
-                                    
+
                                 }
                                 break;
 
@@ -707,175 +761,165 @@ namespace Gestor_Vendas
                             case 6:
                                 Console.Clear();
 
-                                Console.WriteLine("Total de vendas por vendedor");
-                                Console.WriteLine("Qual o codigo do vendedor cujas vendas pertende verificar?");
-                                int codigoTotalVendas = Validacao(1, 1000, true);
+                                Console.WriteLine("TOTAL DE VENDAS POR VENDEDOR");
+                                Console.WriteLine("Código do Vendedor: ");
+                                codigoVenda = Validacao(1, 1000, true);
 
-                                int somaVendas = 0;
+                                int totalVendas = 0;
                                 for (int i = 0; i < venda.Length; i++)
                                 {
-                                    if (codigoTotalVendas == venda[i].codVenda)
-                                        somaVendas += Convert.ToInt32(venda[i].valorVenda);
+                                    if (codigoVenda == venda[i].codVenda)
+                                        totalVendas += Convert.ToInt32(venda[i].valorVenda);
                                     else
                                     {
                                         Console.WriteLine("Codigo não Encontrado");
                                         break;
                                     }
                                 }
-                                
-                                Console.WriteLine($"O vendedor {codigoTotalVendas} fez {somaVendas}€ em vendas");
+
+                                Console.WriteLine($"Vendedor {codigoVenda} fez {totalVendas}€ em vendas.");
                                 break;
 
 
                             //Total de venda por Zona    
                             case 7:
                                 Console.Clear();
-                                
-                                int somaZonaNorte = 0, somaZonaSul = 0, somaZonaLeste = 0, somaZonaOeste = 0;
 
                                 Console.WriteLine("TOTAL DE VENDAS POR ZONA");
+                                Console.Write("Zona: ");
+                                string? vendaZona = Console.ReadLine();
 
                                 for (int i = 0; i < venda.Length; i++)
                                 {
-
-                                    switch (venda[i].zonaVenda)
+                                    if (vendaZona == venda[i].zonaVenda)
                                     {
-                                        case "Norte":
-                                            somaZonaNorte += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
 
-                                        case "Sul":
-                                            somaZonaSul += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-
-                                        case "Leste":
-                                            somaZonaLeste += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-
-                                        case "Oeste":
-                                            somaZonaOeste += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-
-                                        default:
-                                            Console.WriteLine("Zona Invalida!!");
-                                            MenuVenda();
-                                            break;
+                                        switch (vendaZona)
+                                        {
+                                            case "Norte" or "N":
+                                                int totalZonaNorte = 0;
+                                                totalZonaNorte += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaZona}: {totalZonaNorte}€");
+                                                break;
+                                            case "Sul" or "S":
+                                                int totalZonaSul = 0;
+                                                totalZonaSul += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaZona}: {totalZonaSul}€");
+                                                break;
+                                            case "Leste" or "L":
+                                                int totalZonaLeste = 0;
+                                                totalZonaLeste += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaZona}: {totalZonaLeste}€");
+                                                break;
+                                            case "Oeste" or "O":
+                                                int totalZonaOeste = 0;
+                                                totalZonaOeste += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaZona}: {totalZonaOeste}€");
+                                                break;
+                                        }
                                     }
-
+                                    else
+                                    {
+                                        Console.WriteLine("Zona não Encontrada");
+                                        break;
+                                    }
                                 }
-                                
-                                Console.WriteLine($"\nNorth: {somaZonaNorte}€" +
-                                                    $"\nSouth: {somaZonaSul}€" +
-                                                    $"\nEast: {somaZonaLeste}€" +
-                                                    $"\nWest: {somaZonaOeste}€");
                                 break;
 
-                                //Total de Vendas por Mês
+
+                            //Total de Vendas por Mês para todos os Vendedores.
                             case 8:
                                 Console.Clear();
-                                Console.WriteLine("TOTAL DE VENDA POR MÊS");
-
-                                int somaJaneiro = 0;
-                                int somaFevereiro = 0;
-                                int somaMarco = 0;
-                                int somaAbril = 0;
-                                int somaMaio = 0;
-                                int somaJunho = 0;
-                                int somaJulho = 0;
-                                int somaAgosto = 0;
-                                int somaSetembro = 0;
-                                int somaOutubro = 0;
-                                int somaNovembro = 0;
-                                int somaDezembro = 0;
+                                Console.WriteLine("TOTAL DE VENDA POR MÊS PARA TODOS OS VENDEDORES");
+                                Console.Write("Mês: ");
+                                string? vendaMes = Console.ReadLine();
 
                                 for (int i = 0; i < venda.Length; i++)
                                 {
-                                    DateTime Data = DateTime.Parse(venda[i].dataVenda);
-
-                                    switch (Data.Month)
+                                    if (vendaMes == venda[i].dataVenda)
                                     {
-                                        case 1:
-                                            somaJaneiro += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 2:
-                                            somaFevereiro += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 3:
-                                            somaMarco += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 4:
-                                            somaAbril += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 5:
-                                            somaMaio += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 6:
-                                            somaJunho += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 7:
-                                            somaJulho += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 8:
-                                            somaAgosto += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 9:
-                                            somaSetembro += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 10:
-                                            somaOutubro += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 11:
-                                            somaNovembro += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-                                        case 12:
-                                            somaDezembro += Convert.ToInt32(venda[i].valorVenda);
-                                            break;
-
-                                        default:
-                                            Console.WriteLine("Mês Invalido!!");
-                                            MenuVenda();
-                                            break;
-
+                                        switch (vendaMes)
+                                        {
+                                            case "1":
+                                                int totalJaneiro = 0;
+                                                totalJaneiro += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalJaneiro}€");
+                                                break;
+                                            case "2":
+                                                int totalFevereiro = 0;
+                                                totalFevereiro += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalFevereiro}€");
+                                                break;
+                                            case "3":
+                                                int totalMarco = 0;
+                                                totalMarco += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalMarco}€");
+                                                break;
+                                            case "4":
+                                                int totalAbril = 0;
+                                                totalAbril += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalAbril}€");
+                                                break;
+                                            case "5":
+                                                int totalMaio = 0;
+                                                totalMaio += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalMaio}€");
+                                                break;
+                                            case "6":
+                                                int totalJunho = 0;
+                                                totalJunho += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalJunho}€");
+                                                break;
+                                            case "7":
+                                                int totalJulho = 0;
+                                                totalJulho += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalJulho}€");
+                                                break;
+                                            case "8":
+                                                int totalAgosto = 0;
+                                                totalAgosto += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalAgosto}€");
+                                                break;
+                                            case "9":
+                                                int totalSetembro = 0;
+                                                totalSetembro += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalSetembro}€");
+                                                break;
+                                            case "10":
+                                                int totalOutubro = 0;
+                                                totalOutubro += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalOutubro}€");
+                                                break;
+                                            case "11":
+                                                int totalNovembro = 0;
+                                                totalNovembro += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalNovembro}€");
+                                                break;
+                                            case "12":
+                                                int totalDezembro = 0;
+                                                totalDezembro += Convert.ToInt32(venda[i].valorVenda);
+                                                Console.WriteLine($"\n{vendaMes}: {totalDezembro}€");
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Mês não Encontrado");
+                                        break;
                                     }
                                 }
-
-                                Console.WriteLine($"\nJaneiro: {somaJaneiro}€" +
-                                                    $"\nFevereiro: {somaFevereiro}€" +
-                                                    $"\nMarço: {somaMarco}€" +
-                                                    $"\nAbril: {somaAbril}€" +
-                                                    $"\nMaio: {somaMaio}€" +
-                                                    $"\nJunho: {somaJunho}€" +
-                                                    $"\nJulho: {somaJulho}€" +
-                                                    $"\nAgosto: {somaAgosto}€" +
-                                                    $"\nSetembro: {somaSetembro}€" +
-                                                    $"\nOutubro: {somaOutubro}€" +
-                                                    $"\nNovembro: {somaNovembro}€" +
-                                                    $"\nDezembro: {somaDezembro}€");
-
-                                Console.ReadKey();
                                 break;
 
-                            //Total de Venda por Zona
-                            case 9:
-                                
-                                Console.Clear();
-                                Console.WriteLine("TOTAL DE VENDA POR MÊS");
-                                
-                                int somaVendasJaneiro = 0;
-                                int somaVendasFevereiro = 0;
-                                int somaVendasMarco = 0;
-                                int somaVendasAbril = 0;
-                                int somaVendasMaio = 0;
-                                int somaVendasJunho = 0;
-                                int somaVendasJulho = 0;
-                                int somaVendasAgosto = 0;
-                                int somaVendasSetembro = 0;
-                                int somaVendasOutubro = 0;
-                                int somaVendasNovembro = 0;
-                                int somaVendasDezembro = 0;
 
+                            //Total de Vendas por Mês para cada Vendedor
+                            case 9:
+                                Console.Clear();
+                                Console.WriteLine("TOTAL DE VENDA POR MÊS PARA CADA VENDEDOR");
                                 Console.WriteLine("Código do Vendedor:");
                                 codigoVenda = ValidaCodigoVenda(1, 1000, venda, "exist");
+                                Console.Write("Mês: ");
+                                string? vendedorMes = Console.ReadLine();
+
 
                                 for (int p = 0; p < venda.Length; p++)
                                 {
@@ -889,162 +933,118 @@ namespace Gestor_Vendas
                                         //Calcular a soma dos valores das vendas por mês do Vendedor
                                         for (int i = 0; i < venda.Length; i++)
                                         {
-
                                             DateTime Data = DateTime.Parse(venda[i].dataVenda);
 
-                                            switch (Data.Month)
+                                            switch (vendedorMes)
                                             {
-                                                case 1:
-                                                    somaVendasJaneiro += Convert.ToInt32(venda[i].valorVenda);
+                                                case "1":
+                                                    int totalVendedorJaneiro = 0;
+                                                    totalVendedorJaneiro += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorJaneiro}€");
                                                     break;
-                                                case 2:
-                                                    somaVendasFevereiro += Convert.ToInt32(venda[i].valorVenda);
+                                                case "2":
+                                                    int totalVendedorFevereiro = 0;
+                                                    totalVendedorFevereiro += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorFevereiro}€");
                                                     break;
-                                                case 3:
-                                                    somaVendasMarco += Convert.ToInt32(venda[i].valorVenda);
+                                                case "3":
+                                                    int totalVendedorMarco = 0;
+                                                    totalVendedorMarco += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorMarco}€");
                                                     break;
-                                                case 4:
-                                                    somaVendasAbril += Convert.ToInt32(venda[i].valorVenda);
+                                                case "4":
+                                                    int totalVendedorAbril = 0;
+                                                    totalVendedorAbril += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorAbril}€");
                                                     break;
-                                                case 5:
-                                                    somaVendasMaio += Convert.ToInt32(venda[i].valorVenda);
+                                                case "5":
+                                                    int totalVendedorMaio = 0;
+                                                    totalVendedorMaio += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorMaio}€");
                                                     break;
-                                                case 6:
-                                                    somaVendasJunho += Convert.ToInt32(venda[i].valorVenda);
+                                                case "6":
+                                                    int totalVendedorJunho = 0;
+                                                    totalVendedorJunho += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorJunho}€");
                                                     break;
-                                                case 7:
-                                                    somaVendasJulho += Convert.ToInt32(venda[i].valorVenda);
+                                                case "7":
+                                                    int totalVendedorJulho = 0;
+                                                    totalVendedorJulho += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorJulho}€");
                                                     break;
-                                                case 8:
-                                                    somaVendasAgosto += Convert.ToInt32(venda[i].valorVenda);
+                                                case "8":
+                                                    int totalVendedorAgosto = 0;
+                                                    totalVendedorAgosto += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorAgosto}€");
                                                     break;
-                                                case 9:
-                                                    somaVendasSetembro += Convert.ToInt32(venda[i].valorVenda);
+                                                case "9":
+                                                    int totalVendedorSetembro = 0;
+                                                    totalVendedorSetembro += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorSetembro}€");
                                                     break;
-                                                case 10:
-                                                    somaVendasOutubro += Convert.ToInt32(venda[i].valorVenda);
+                                                case "10":
+                                                    int totalVendedorOutubro = 0;
+                                                    totalVendedorOutubro += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorOutubro}€");
                                                     break;
-                                                case 11:
-                                                    somaVendasNovembro += Convert.ToInt32(venda[i].valorVenda);
+                                                case "11":
+                                                    int totalVendedorNovembro = 0;
+                                                    totalVendedorNovembro += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorNovembro}€");
                                                     break;
-                                                case 12:
-                                                    somaVendasDezembro += Convert.ToInt32(venda[i].valorVenda);
+                                                case "12":
+                                                    int totalVendedorDezembro = 0;
+                                                    totalVendedorDezembro += Convert.ToInt32(venda[i].valorVenda);
+                                                    Console.WriteLine($"\n{vendedorMes}: {totalVendedorDezembro}€");
                                                     break;
                                                 default:
                                                     Console.WriteLine("Mês Invalido!!");
                                                     break;
                                             }
-                                            
+
                                         }
                                     }
                                 }
 
-
-                                //Apresentação das vendas de todos os meses do Vendedor.
-                                Console.WriteLine(  $"\nJaneiro: {somaVendasJaneiro}€" +
-                                                    $"\nFevereiro: {somaVendasFevereiro}€" +
-                                                    $"\nMarço: {somaVendasMarco}€" +
-                                                    $"\nAbril: {somaVendasAbril}€" +
-                                                    $"\nMaio: {somaVendasMaio}€" +
-                                                    $"\nJunho: {somaVendasJunho}€" +
-                                                    $"\nJulho: {somaVendasJulho}€" +
-                                                    $"\nAgosto: {somaVendasAgosto}€" +
-                                                    $"\nSetembro: {somaVendasSetembro}€" +
-                                                    $"\nOutubro: {somaVendasOutubro}€" +
-                                                    $"\nNovembro: {somaVendasNovembro}€" +
-                                                    $"\nDezembro: {somaVendasDezembro}€");
-
-                                
                                 break;
-                                
 
-                            //Leitura Dados de Vendas.
+                            //Salvando dados de Vendas.
                             case 10:
-                                Console.Clear();
-                                Console.WriteLine("LENDO DADOS DE VENDAS");
+                                Array.Resize(ref vendedor, 0);
 
-                                Array.Resize(ref venda, 0);
+                                //Definição do caminho do Arquivo.
+                                string arquivo = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Venda\Venda.csv";
 
-                                string arquivoLer = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Venda\Venda.csv";
-
-                                StreamReader textoLeitura = new(arquivoLer);
-                                CsvConfiguration csvConfigIn = new(CultureInfo.CurrentCulture)
+                                //Lendo os dados do Arquivo.
+                                using (StreamReader leitura = new(arquivo))
                                 {
-                                    Comment = '#',
-                                    AllowComments = true,
-                                    Delimiter = ";",
-                                };
-
-                                CsvReader ler = new (textoLeitura, csvConfigIn);
-
-                                int l = 0;
-                                while (ler.Read())
-                                {
-                                    if (l > 0)
+                                    //Adicionando configuração CSV
+                                    CsvConfiguration csvConfigIn = new(CultureInfo.CurrentCulture)
                                     {
-                                        //incremento = vendedor.Leght + 1;
-                                        Array.Resize(ref venda, venda.Length + 1);
+                                        //Comment = '#',
+                                        //AllowComments = true,
+                                        Delimiter = "; ",
+                                    };
 
+                                    CsvReader ler = new(leitura, csvConfigIn);
 
-                                        venda[l - 1].codVenda = Convert.ToInt32(ler.GetField(0));
-                                        venda[l - 1].zonaVenda = ler.GetField(1);
-                                        venda[l - 1].dataVenda = ler.GetField(2);
-                                        venda[l - 1].valorVenda = Convert.ToInt32(ler.GetField(3));
+                                    //Adicionando Cabeçalho
+                                    ler.Read();
 
+                                    //Lendo os dados do Arquivo.
+                                    for (int i = 0; i < vendedor.Length; i++)
+                                    {
+                                        venda[i].codVenda = ler.GetField<int>("Código");
+                                        venda[i].zonaVenda = ler.GetField<string>("Zona");
+                                        venda[i].dataVenda = ler.GetField<string>("Data");
+                                        venda[i].valorVenda = ler.GetField<decimal>("Valor");
+                                        ler.Read();
                                     }
+
                                 }
-
-
-                                textoLeitura.Close();
-                                Console.WriteLine("\nFicheiro Carregado com Sucesso!");
+                                Console.WriteLine("\nDados de Vendas Lidos com Sucesso!");
                                 break;
 
-
-                            //Salvando Dados dos Venda.
-                            case 11:
-                                Console.Clear();
-                                Console.WriteLine("SALVANDO DADOS DE VENDAS");
-
-                                //Escrita de chars corretos ã e ê, etc.
-                                Console.OutputEncoding = Encoding.UTF8;
-
-                                //Definição de Variável
-                                string arquivoSalvar = @"C:\Users\daniel.marques\Documents\Engenharia Informática\FP\C#\Gestor de Vendas\GV\Save\Venda\Venda.csv";
-
-                                //Usar a Classe StreamWrite para acesso ao ficheiro para a escrita.
-                                StreamWriter textoEscrita = new(arquivoSalvar);
-
-
-                                CsvConfiguration csvConfig = new(CultureInfo.CurrentCulture)
-                                {
-                                    Comment = '#',
-                                    AllowComments = true,
-                                    Delimiter = ";",
-                                };
-
-                                CsvWriter escrita = new (textoEscrita, csvConfig);
-
-
-                                //Escreve cabeçalho do Ficheiro.
-                                escrita.WriteField("Código");
-                                escrita.WriteField("Zona");
-                                escrita.WriteField("Data");
-                                escrita.WriteField("Valor de Venda");
-                                escrita.NextRecord();
-
-                                
-                                for (int i = 0; i < venda.Length; i++)
-                                {
-                                    escrita.WriteField(venda[i].codVenda);
-                                    escrita.WriteField(venda[i].zonaVenda);
-                                    escrita.WriteField(venda[i].dataVenda);
-                                    escrita.WriteField(venda[i].valorVenda);
-                                    escrita.NextRecord();
-                                }
-
-                                textoEscrita.Close();
-                                Console.WriteLine("\nDados Salvos com Sucesso!");
-                                break;
 
                             case 0:
                                 Console.Clear();
@@ -1052,7 +1052,9 @@ namespace Gestor_Vendas
                                 break;
                         }
 
+
                         Console.ReadKey();
+                        SalvarVenda(venda);
 
                     } while (true);
                 }
@@ -1063,4 +1065,7 @@ namespace Gestor_Vendas
 }
 
 
-      
+
+
+
+
